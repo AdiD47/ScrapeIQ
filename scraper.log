@@ -1,0 +1,19 @@
+2025-11-13 23:50:03,557 - __main__ - INFO - ============================================================
+2025-11-13 23:50:03,557 - __main__ - INFO - Jira Scraping and Transformation Pipeline
+2025-11-13 23:50:03,558 - __main__ - INFO - ============================================================
+2025-11-13 23:50:03,558 - __main__ - INFO - Initializing components...
+2025-11-13 23:50:03,559 - __main__ - INFO - Projects to scrape: SPARK, KAFKA, HADOOP
+2025-11-13 23:50:03,559 - __main__ - INFO - Starting scraping process...
+2025-11-13 23:50:03,559 - scraper.data_scraper - INFO - Starting to scrape 3 projects
+2025-11-13 23:50:09,531 - scraper.jira_client - INFO - Successfully connected to Jira API
+2025-11-13 23:50:09,531 - scraper.data_scraper - INFO - Starting to scrape project: SPARK
+2025-11-13 23:51:29,935 - scraper.jira_client - ERROR - Request failed for https://issues.apache.org/jira/rest/api/2/issue/SPARK-506/comment: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2025-11-13 23:51:29,936 - utils.retry - WARNING - Retryable error in _make_request: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')). Retrying...
+2025-11-13 23:51:45,823 - transformer.data_transformer - INFO - Saved 10 issues to n:\Roms\data\jira_issues.jsonl
+2025-11-13 23:51:45,823 - __main__ - INFO - Transformed and saved 10 issues so far...
+2025-11-13 23:52:24,541 - scraper.jira_client - ERROR - Request failed for https://issues.apache.org/jira/rest/api/2/issue/SPARK-505/comment: HTTPSConnectionPool(host='issues.apache.org', port=443): Max retries exceeded with url: /jira/rest/api/2/issue/SPARK-505/comment (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000020C1F87ADD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it'))
+2025-11-13 23:52:24,542 - utils.retry - WARNING - Retryable error in _make_request: HTTPSConnectionPool(host='issues.apache.org', port=443): Max retries exceeded with url: /jira/rest/api/2/issue/SPARK-505/comment (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000020C1F87ADD0>: Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it')). Retrying...
+2025-11-13 23:52:59,118 - scraper.jira_client - ERROR - Request failed for https://issues.apache.org/jira/rest/api/2/issue/SPARK-502/comment: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2025-11-13 23:52:59,120 - utils.retry - WARNING - Retryable error in _make_request: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')). Retrying...
+2025-11-13 23:53:05,723 - __main__ - WARNING - Pipeline interrupted by user. State saved. Resume by running again.
+2025-11-13 23:53:05,723 - transformer.data_transformer - INFO - Saved 3 issues to n:\Roms\data\jira_issues.jsonl
