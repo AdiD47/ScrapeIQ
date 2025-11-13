@@ -27,11 +27,12 @@ class JiraClient:
         Args:
             base_url: Base URL for Jira REST API
             requests_per_second: Rate limit (requests per second)
-            timeout: Request timeout in seconds
+            timeout: Request timeout in seconds (or tuple for (connect, read))
             max_retries: Maximum retry attempts
         """
         self.base_url = base_url
-        self.timeout = timeout
+        # Use tuple timeout: (connect_timeout, read_timeout)
+        self.timeout = (config.CONNECT_TIMEOUT, config.READ_TIMEOUT)
         self.max_retries = max_retries
         self.rate_limiter = RateLimiter(requests_per_second, period=1.0)
         self.session = requests.Session()
@@ -39,6 +40,14 @@ class JiraClient:
             'Accept': 'application/json',
             'User-Agent': 'Jira-Scraper/1.0 (Educational Purpose)'
         })
+        # Configure connection pooling for better reliability
+        adapter = requests.adapters.HTTPAdapter(
+            pool_connections=10,
+            pool_maxsize=10,
+            max_retries=0  # We handle retries ourselves
+        )
+        self.session.mount('https://', adapter)
+        self.session.mount('http://', adapter)
     
     @retry_with_backoff(max_retries=5, initial_delay=1.0, max_delay=60.0)
     def _make_request(self, endpoint: str, params: Optional[Dict] = None) -> Dict:
@@ -84,6 +93,14 @@ class JiraClient:
             if e.response.status_code == 404:
                 logger.warning(f"Resource not found: {url}")
                 return {}
+            raise
+        except requests.exceptions.Timeout as e:
+            # Timeout errors - log as warning since they're retryable
+            logger.warning(f"Request timeout for {url}: {str(e)[:100]}... (will retry)")
+            raise
+        except (requests.exceptions.ConnectionError, requests.exceptions.ChunkedEncodingError) as e:
+            # Connection errors are common with Jira - log as warning, not error
+            logger.warning(f"Connection issue for {url}: {str(e)[:100]}... (will retry)")
             raise
         except requests.exceptions.RequestException as e:
             logger.error(f"Request failed for {url}: {e}")

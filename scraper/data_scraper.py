@@ -113,8 +113,8 @@ class DataScraper:
                     )
                     break
                 
-                # Small delay to be respectful
-                time.sleep(0.1)
+                # Small delay to be respectful and reduce connection pressure
+                time.sleep(0.3)
                 
             except Exception as e:
                 logger.error(f"Error scraping project {project_key} at start_at={start_at}: {e}")

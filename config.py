@@ -18,7 +18,9 @@ PROJECTS = ["SPARK", "KAFKA", "HADOOP"]
 REQUESTS_PER_SECOND = 2  # Conservative rate limit
 MAX_RETRIES = 5
 RETRY_DELAY = 1  # seconds
-TIMEOUT = 30  # seconds
+TIMEOUT = 60  # seconds (increased for slow responses)
+CONNECT_TIMEOUT = 10  # seconds for connection establishment
+READ_TIMEOUT = 60  # seconds for reading response
 
 # Pagination
 ISSUES_PER_PAGE = 100
