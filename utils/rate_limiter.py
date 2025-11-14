@@ -19,7 +19,7 @@ class RateLimiter:
         """
         self.max_calls = max_calls
         self.period = period
-        self.calls = deque()
+        self.calls = deque() 
         self.lock = Lock()
     
     def wait_if_needed(self):

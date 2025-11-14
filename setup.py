@@ -7,7 +7,7 @@ setup(
     name="jira-scraper",
     version="1.0.0",
     description="Data scraping and transformation pipeline for Apache Jira",
-    author="Your Name",
+    author="Adi Dhusia",
     packages=find_packages(),
     install_requires=[
         "requests>=2.31.0",
