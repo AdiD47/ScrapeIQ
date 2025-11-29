@@ -273,3 +273,33 @@ class DataTransformer:
             logger.error(f"Failed to save to {output_file}: {e}")
             raise
 
+    def save_to_toon(self, transformed_issues: List[Dict], output_file: str):
+        """
+        Save transformed issues to TOON (.toon) file.
+
+        Each issue is encoded as a TOON block. Blocks are separated by a blank line
+        for readability. This uses a minimal encoder aligned with TOON's format
+        overview: indentation for nested objects, tabular arrays for uniform items,
+        explicit array lengths, and field headers.
+        """
+        try:
+            from utils.ton_encoder import encode_to_lines
+        except ImportError:
+            logger.error("TOON encoder not available. Ensure utils/ton_encoder.py exists.")
+            raise
+
+        try:
+            with open(output_file, 'a', encoding='utf-8') as f:
+                for issue in transformed_issues:
+                    if not issue:
+                        continue
+                    lines = encode_to_lines(issue)
+                    for line in lines:
+                        f.write(line + '\n')
+                    # Separate documents with a blank line
+                    f.write('\n')
+            logger.info(f"Saved {len(transformed_issues)} issues to {output_file} (TOON)")
+        except Exception as e:
+            logger.error(f"Failed to save TOON to {output_file}: {e}")
+            raise
+

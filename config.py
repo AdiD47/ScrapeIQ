@@ -38,6 +38,12 @@ STATE_FILE = STATE_DIR / "scraper_state.json"
 # Output file
 OUTPUT_FILE = DATA_DIR / "jira_issues.jsonl"
 
+# Output format: "jsonl" or "toon"
+OUTPUT_FORMAT = os.getenv("OUTPUT_FORMAT", "jsonl").lower()
+
+# TON output file (used when OUTPUT_FORMAT == "toon")
+TOON_OUTPUT_FILE = DATA_DIR / "jira_issues.toon"
+
 # Fields to extract
 ISSUE_FIELDS = [
     "summary",

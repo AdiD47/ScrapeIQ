@@ -63,30 +63,45 @@ def main():
                 
                 # Write in batches
                 if len(batch) >= batch_size:
-                    transformer.save_to_jsonl(batch, str(config.OUTPUT_FILE))
+                    if config.OUTPUT_FORMAT == "toon":
+                        transformer.save_to_toon(batch, str(config.TOON_OUTPUT_FILE))
+                    else:
+                        transformer.save_to_jsonl(batch, str(config.OUTPUT_FILE))
                     batch = []
                     logger.info(f"Transformed and saved {total_transformed} issues so far...")
         
         # Write remaining batch
         if batch:
-            transformer.save_to_jsonl(batch, str(config.OUTPUT_FILE))
+            if config.OUTPUT_FORMAT == "toon":
+                transformer.save_to_toon(batch, str(config.TOON_OUTPUT_FILE))
+            else:
+                transformer.save_to_jsonl(batch, str(config.OUTPUT_FILE))
         
         logger.info("=" * 60)
         logger.info(f"Pipeline completed successfully!")
         logger.info(f"Total issues transformed: {total_transformed}")
-        logger.info(f"Output file: {config.OUTPUT_FILE}")
+        if config.OUTPUT_FORMAT == "toon":
+            logger.info(f"Output file (TOON): {config.TOON_OUTPUT_FILE}")
+        else:
+            logger.info(f"Output file: {config.OUTPUT_FILE}")
         logger.info("=" * 60)
         
     except KeyboardInterrupt:
         logger.warning("Pipeline interrupted by user. State saved. Resume by running again.")
         if batch:
-            transformer.save_to_jsonl(batch, str(config.OUTPUT_FILE))
+            if config.OUTPUT_FORMAT == "toon":
+                transformer.save_to_toon(batch, str(config.TOON_OUTPUT_FILE))
+            else:
+                transformer.save_to_jsonl(batch, str(config.OUTPUT_FILE))
         state_manager.save_state()
         sys.exit(0)
     except Exception as e:
         logger.error(f"Pipeline failed with error: {e}", exc_info=True)
         if batch:
-            transformer.save_to_jsonl(batch, str(config.OUTPUT_FILE))
+            if config.OUTPUT_FORMAT == "toon":
+                transformer.save_to_toon(batch, str(config.TOON_OUTPUT_FILE))
+            else:
+                transformer.save_to_jsonl(batch, str(config.OUTPUT_FILE))
         state_manager.save_state()
         sys.exit(1)
 
